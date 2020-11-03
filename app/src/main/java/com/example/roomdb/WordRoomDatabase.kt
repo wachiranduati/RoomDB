@@ -39,8 +39,8 @@ abstract class WordRoomDatabase() : RoomDatabase() {
     private class WordDatabaseCallBack(
         private val scope: CoroutineScope
     ) : RoomDatabase.Callback() {
-        override fun onOpen(db: SupportSQLiteDatabase) {
-            super.onOpen(db)
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
             INSTANCE.let { database ->
                 scope.launch {
                     if (database != null) {
