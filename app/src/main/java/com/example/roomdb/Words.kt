@@ -14,5 +14,5 @@ data class Words(
     val numbers : Int){
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    public var id : Int = 0
+    var id : Int = 0
 }
