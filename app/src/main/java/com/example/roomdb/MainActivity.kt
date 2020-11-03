@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), View.OnClickListener{
     lateinit var wordViewModel: WordViewModel
+    var lastId = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -27,10 +28,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         wordViewModel.allWords.observe(this, Observer { words ->
             // Update the cached copy of the words in the adapter.
             var dbContent : String = ""
-            words.forEach {
-                dbContent += "${it.word}[${it.id}] "
+            if(words.isNotEmpty()){
+                lastId = words.last().id
+                words.forEach {
+                    dbContent += "${it.word}[${it.id}] "
+                }
+                readDbTxtVw.text = dbContent
             }
-            readDbTxtVw.text = dbContent
         })
     }
 
@@ -49,7 +53,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
 
     private fun updateWord() {
         val updtxt : String = updateTextTxtEdtTxt.text.toString()
-        val updateWord : Words = Words(updtxt, updtxt.length)
+        val updateWord = Words(updtxt, updtxt.length)
+        // we have to define the word id being updated -> for now we'll set it to the latest word
+        updateWord.id = lastId
         wordViewModel.update(updateWord)
     }
 
