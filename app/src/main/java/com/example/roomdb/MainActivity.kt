@@ -1,10 +1,12 @@
 package com.example.roomdb
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.roomdb.ui.SecondaryActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), View.OnClickListener{
@@ -21,6 +23,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         InsertButton.setOnClickListener(this)
         updateButon.setOnClickListener(this)
         deleteWordsBtn.setOnClickListener(this)
+        nextScreenButton.setOnClickListener(this)
 
     }
 
@@ -43,6 +46,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
             R.id.InsertButton -> insertNewWord()
             R.id.updateButon -> updateWord()
             R.id.deleteWordsBtn -> deleteErr()
+            R.id.nextScreenButton -> startActivity(Intent(this, SecondaryActivity::class.java))
         }
     }
 
