@@ -6,13 +6,16 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.roomdb.persistence.RandomSentences
+import com.example.roomdb.persistence.RandomSentencesDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [Words::class], version = 1, exportSchema = false)
+@Database(entities = [Words::class, RandomSentences::class], version = 1, exportSchema = false)
 abstract class WordRoomDatabase() : RoomDatabase() {
 
     abstract fun wordDao() : WordsDao
+    abstract fun RandomSentencesDao() : RandomSentencesDao
 
     companion object{
         @Volatile
@@ -45,13 +48,19 @@ abstract class WordRoomDatabase() : RoomDatabase() {
                 scope.launch {
                     if (database != null) {
                         populateDatabase(database.wordDao())
+                        populateRndmSentcesDB(database.RandomSentencesDao())
                     }
                 }
             }
         }
 
+        private suspend fun populateRndmSentcesDB(randomSentencesDao: RandomSentencesDao) {
+            randomSentencesDao.addRandomSentence(RandomSentences("The very first sentence"))
+            randomSentencesDao.addRandomSentence(RandomSentences("Second statement as well"))
+            randomSentencesDao.addRandomSentence(RandomSentences("third statement as well"))
+        }
+
         suspend fun populateDatabase(wordDao: WordsDao) {
-            wordDao.deleteAll()
             var word = Words("Hello",12)
             wordDao.addWord(word)
             word = Words("World!", 23)
